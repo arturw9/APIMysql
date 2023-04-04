@@ -31,7 +31,7 @@ namespace APIMysql.Controllers
         }
 
         [AllowAnonymous]
-        [Route("/Login")]
+        [Route("/api/Login")]
         [HttpGet]
         public async Task<ActionResult<bool>> Login(string? dados)
         {

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace APIMysql.Controllers
 {
@@ -43,14 +42,22 @@ namespace APIMysql.Controllers
         [HttpPost]
         public async Task<ActionResult<bool>> Login(User user){
             var dados = _context.Users.FirstOrDefault(x=>x.Email == user.Email && x.Senha == user.Senha);
-            if (dados != null)
+            try
             {
-                return true;
+                if (dados != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return NotFound("E-mail ou senha não compativeis");
+                }
             }
-            else
+            catch (Exception)
             {
-                return false;
+                throw;
             }
+           
         }
    
         [AllowAnonymous]
@@ -62,6 +69,23 @@ namespace APIMysql.Controllers
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex) { 
+                return BadRequest(ex.Message);
+            }
+            return Ok("Deu certo");
+        }
+
+        [AllowAnonymous]
+        [Route("/api/AllUsers")]
+        [HttpGet]
+        public async Task<ActionResult<User>> AllUsers()
+        {   
+            try
+            {
+                var usuarios = await _context.Users.Where(x => x.Senha != null && x.Email != null).ToListAsync();
+                return Ok(usuarios);
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(ex.Message);
             }
             return Ok("Deu certo");

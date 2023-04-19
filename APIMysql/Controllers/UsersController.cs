@@ -14,10 +14,12 @@ namespace APIMysql.Controllers
     public class UsersController : Controller
     {
         private readonly ApiDbContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public UsersController(ApiDbContext context)
+        public UsersController(ApiDbContext context, IUserRepository userRepository)
         {
             _context = context;
+            _userRepository = userRepository;
         }
         [AllowAnonymous]
         [Route("/")]
@@ -61,6 +63,7 @@ namespace APIMysql.Controllers
         }
    
         [AllowAnonymous]
+        [Route("/api/CriarUser")]
         [HttpPost]
         public async Task<ActionResult<User>> CriarUser(User user){
             _context.Users.Add(user);
@@ -88,7 +91,61 @@ namespace APIMysql.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            return Ok("Deu certo");
+        }
+
+        [AllowAnonymous]
+        [Route("/api/DetailsUser")]
+        [HttpGet]
+        public IActionResult Details(string email)
+        {
+            var user = _userRepository.GetByEmail(email);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        [AllowAnonymous]
+        [Route("/api/UpdateUsers")]
+        [HttpPut]
+        public IActionResult Edit(string email,[FromBody] User user)
+        {
+            var existingUser = _userRepository.GetByEmail(email);
+
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+
+            existingUser.Email = user.Email;
+            existingUser.Senha = user.Senha;
+
+            _userRepository.Update(existingUser);
+
+            return Ok(user);
+        }
+
+        [AllowAnonymous]
+        [Route("/api/DeleteUser")]
+        [HttpGet]
+        public IActionResult Delete(string email)
+        {
+            var user = _userRepository.GetByEmail(email);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+
+        [AllowAnonymous]
+        [Route("/api/DeleteUser")]
+        [HttpPost]
+        public IActionResult DeleteConfirmed(string email)
+        {
+            _userRepository.Delete(email);
+            return RedirectToAction("Index");
         }
     }
 

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace APIMysql.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     [EnableCors("AllowAlls")]
 
     public class UsersController : Controller

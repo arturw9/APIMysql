@@ -111,7 +111,7 @@ namespace APIMysql.Controllers
         [HttpPut]
         public IActionResult Edit(string id,[FromBody] User user)
         {
-            var existingUser = _userRepository.GetById(user.Id.ToString());
+            var existingUser = _userRepository.GetById(id.ToString());
 
             if (existingUser == null)
             {

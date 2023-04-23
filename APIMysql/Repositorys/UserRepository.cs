@@ -21,6 +21,11 @@ public class UserRepository : IUserRepository
         return _context.Users.FirstOrDefault(u => u.Email == email);
     }
 
+    public User GetById(string id)
+    {
+        return _context.Users.FirstOrDefault(u => u.Id.ToString() == id);
+    }
+
     public void Add(User user)
     {
         _context.Users.Add(user);
@@ -29,7 +34,9 @@ public class UserRepository : IUserRepository
 
     public void Update(User user)
     {
-        _context.Entry(user).State = EntityState.Modified;
+        var userUp = _context.Users.Find(user.Id);
+        userUp.Email = user.Email;
+        userUp.Senha = user.Senha;
         _context.SaveChanges();
     }
 

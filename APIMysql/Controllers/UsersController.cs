@@ -109,9 +109,9 @@ namespace APIMysql.Controllers
         [AllowAnonymous]
         [Route("/api/UpdateUsers")]
         [HttpPut]
-        public IActionResult Edit(string email,[FromBody] User user)
+        public IActionResult Edit(string id,[FromBody] User user)
         {
-            var existingUser = _userRepository.GetByEmail(email);
+            var existingUser = _userRepository.GetById(user.Id.ToString());
 
             if (existingUser == null)
             {
@@ -121,6 +121,7 @@ namespace APIMysql.Controllers
             existingUser.Email = user.Email;
             existingUser.Senha = user.Senha;
 
+
             _userRepository.Update(existingUser);
 
             return Ok(user);
@@ -129,9 +130,9 @@ namespace APIMysql.Controllers
         [AllowAnonymous]
         [Route("/api/DeleteUser")]
         [HttpGet]
-        public IActionResult Delete(string email)
+        public IActionResult Delete(string id)
         {
-            var user = _userRepository.GetByEmail(email);
+            var user = _userRepository.GetById(id);
             if (user == null)
             {
                 return NotFound();
@@ -142,9 +143,9 @@ namespace APIMysql.Controllers
         [AllowAnonymous]
         [Route("/api/DeleteUser")]
         [HttpPost]
-        public IActionResult DeleteConfirmed(string email)
+        public IActionResult DeleteConfirmed(string id)
         {
-            _userRepository.Delete(email);
+            _userRepository.Delete(id);
             return RedirectToAction("Index");
         }
     }

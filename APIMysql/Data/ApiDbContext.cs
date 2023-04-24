@@ -11,6 +11,6 @@ namespace APIMysql.Data
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Itens> Itens { get; set; }
+        public DbSet<Item> Itens { get; set; }
     }
 }

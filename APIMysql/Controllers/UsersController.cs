@@ -42,8 +42,9 @@ namespace APIMysql.Controllers
         [AllowAnonymous]
         [Route("/api/Login")]
         [HttpPost]
-        public async Task<ActionResult<bool>> Login(User user){
-            var dados = _context.Users.FirstOrDefault(x=>x.Email == user.Email && x.Senha == user.Senha);
+        public async Task<ActionResult<bool>> Login(User user)
+        {
+            var dados = _context.Users.FirstOrDefault(x => x.Email == user.Email && x.Senha == user.Senha);
             try
             {
                 if (dados != null)
@@ -59,19 +60,21 @@ namespace APIMysql.Controllers
             {
                 throw;
             }
-           
+
         }
-   
+
         [AllowAnonymous]
         [Route("/api/CriarUser")]
         [HttpPost]
-        public async Task<ActionResult<User>> CriarUser(User user){
+        public async Task<ActionResult<User>> CriarUser(User user)
+        {
             _context.Users.Add(user);
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (Exception ex) { 
+            catch (Exception ex)
+            {
                 return BadRequest(ex.Message);
             }
             return Ok("Deu certo");
@@ -81,7 +84,7 @@ namespace APIMysql.Controllers
         [Route("/api/AllUsers")]
         [HttpGet]
         public async Task<ActionResult<User>> AllUsers()
-        {   
+        {
             try
             {
                 var usuarios = await _context.Users.Where(x => x.Senha != null && x.Email != null).ToListAsync();
@@ -109,7 +112,7 @@ namespace APIMysql.Controllers
         [AllowAnonymous]
         [Route("/api/UpdateUsers")]
         [HttpPut]
-        public IActionResult Edit(string id,[FromBody] User user)
+        public IActionResult Edit(string id, [FromBody] User user)
         {
             var existingUser = _userRepository.GetById(id.ToString());
 

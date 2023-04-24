@@ -2,12 +2,15 @@
 
 namespace APIMysql.Models
 {
-    public class Itens
+    public class Item
     {
         [Key]
         [StringLength(100)]
-        public string Nome { get; set; }
+
+        public Guid? Id { get; set; }
+     
         public string Imagem { get; set; }
+        public string Nome { get; set; }
         public string valor { get; set; }
         public string quantidade { get; set; }
     }

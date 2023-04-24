@@ -9,3 +9,11 @@ public interface IUserRepository
     void Update( User user);
     void Delete(string id);
 }
+public interface IItensRepository
+{
+    IEnumerable<Item> GetAllItens();
+    Item GetByIdItem(string id);
+    void AddItem(Item item);
+    void UpdateItem(Item item);
+    void DeleteItem(string id);
+}
